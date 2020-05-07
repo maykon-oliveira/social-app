@@ -1,0 +1,13 @@
+GET https://us-central1-social-app-e7b22.cloudfunctions.net/api/screams HTTP/1.1
+
+###
+
+POST https://us-central1-social-app-e7b22.cloudfunctions.net/api/screams HTTP/1.1
+Content-Type: application/json
+
+{
+    "body": "From test",
+    "userHandler": "new"
+}
+
+###
