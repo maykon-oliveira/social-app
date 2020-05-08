@@ -11,6 +11,12 @@ firebase.initializeApp(firebaseConfig);
 
 const db = admin.firestore();
 
+const isEmail = (e) => {
+  const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return e && e.match(reg);
+};
+const isEmpty = (s) => !s && s.trim() === "";
+
 app.get("/screams", (req, res) => {
   db.collection("screams")
     .orderBy("createdAt", "desc")
@@ -28,34 +34,69 @@ app.get("/screams", (req, res) => {
     .catch((e) => console.log(e));
 });
 
-app.post("/screams", (req, res) => {
+const FBAuth = (req, res, next) => {
+  const authorization = req.headers.authorization;
+
+  if (!authorization && !authorization.startsWith("Bearer ")) {
+    console.error("No token found");
+    return res.status(403).json({ error: "Unauthorized" });
+  }
+
+  const idToken = authorization.split("Bearer ")[1];
+
+  admin
+    .auth()
+    .verifyIdToken(idToken)
+    .then((decodedToken) => {
+      req.user = decodedToken;
+      return db
+        .collection("users")
+        .where("userId", "==", req.user.uid)
+        .limit(1)
+        .get();
+    })
+    .then((data) => {
+      req.user.handle = data.docs[0].data().handle;
+      return next();
+    })
+    .catch((err) => {
+      console.error("Error while verifying token ", err);
+      return res.status(403).json(err);
+    });
+};
+
+app.post("/screams", FBAuth, (req, res) => {
+  if (isEmpty(req.body.body)) {
+    return res.status(400).json({ body: "Body must not be empty" });
+  }
+
   const newScream = {
-    ...req.body,
+    body: req.body.body,
+    userHandle: req.user.handle,
     createdAt: new Date().toISOString(),
   };
 
   db.collection("screams")
     .add(newScream)
-    .then(({ id }) =>
-      res.status(201).json({ m: `Document ${id} successfully` })
-    )
-    .catch((e) => {
-      res.status(500).json({ error: "Something wrong" });
-      console.log(e);
+    .then(({ id }) => {
+      const resScream = newScream;
+      resScream.screamId = id;
+      res.json(resScream);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: "something went wrong" });
+      console.error(err);
     });
 });
-
-const isEmail = (e) => {
-  const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return e && e.match(reg);
-};
-const isEmpty = (s) => !s && s.trim() === "";
 
 // Sign up
 let token, userId;
 app.post("/signup", (req, res) => {
   const newUser = {
-    ...req.body,
+    email: req.body.email,
+    password: req.body.password,
+    confirmPassword: req.body.confirmPassword,
+    handle: req.body.handle,
   };
 
   const errors = {};
@@ -109,7 +150,6 @@ app.post("/signup", (req, res) => {
 });
 
 // Login
-
 app.post("/login", (req, res) => {
   const user = {
     email: req.body.email,
@@ -138,4 +178,4 @@ app.post("/login", (req, res) => {
     });
 });
 
-exports.api = functions.https.onRequest(app);
+exports.api = functions.region("us-central1").https.onRequest(app);
