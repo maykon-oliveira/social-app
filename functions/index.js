@@ -45,12 +45,34 @@ app.post("/screams", (req, res) => {
     });
 });
 
+const isEmail = (e) => {
+  const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return e && e.match(reg);
+};
+const isEmpty = (s) => !s && s.trim() === "";
+
 // Sign up
 let token, userId;
 app.post("/signup", (req, res) => {
   const newUser = {
     ...req.body,
   };
+
+  const errors = {};
+
+  if (isEmpty(newUser.email)) {
+    errors.email = "Must not be empty";
+  } else if (!isEmail(newUser.email))
+    errors.email = "Must be a valid email address";
+
+  if (isEmpty(newUser.password)) errors.password = "Must not me empty";
+
+  if (newUser.password !== newUser.confirmPassword)
+    errors.password = "Password must match";
+
+  if (isEmpty(newUser.handle)) errors.handle = "Must not be empty";
+
+  if (Object.keys(errors).length) return res.status(404).json(errors);
 
   db.doc(`/users/${newUser.handle}`)
     .get()
@@ -81,6 +103,36 @@ app.post("/signup", (req, res) => {
       console.log(e);
       if (e.code === "auth/email-alread-in-use") {
         return res.status(400).json({ email: "Email already in use" });
+      }
+      return res.status(500).json({ error: e.code });
+    });
+});
+
+// Login
+
+app.post("/login", (req, res) => {
+  const user = {
+    email: req.body.email,
+    password: req.body.password,
+  };
+
+  const errors = {};
+
+  if (isEmpty(user.email)) errors.email = "Must not be empty";
+  if (isEmpty(user.password)) errors.password = "Must not me empty";
+  if (Object.keys(errors).length) return res.status(404).json(errors);
+
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(user.email, user.password)
+    .then(({ user }) => user.getIdToken())
+    .then((token) => res.json({ token }))
+    .catch((e) => {
+      console.log(e);
+      if (e.code === "auth/wrong-password") {
+        return res
+          .status(403)
+          .json({ general: "Wrong credentials, please try again" });
       }
       return res.status(500).json({ error: e.code });
     });

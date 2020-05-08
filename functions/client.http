@@ -1,7 +1,7 @@
-GET https://us-central1-social-app-e7b22.cloudfunctions.net/api/screams HTTP/1.1
+GET http://localhost:5001/social-app-e7b22/us-central1/api/screams HTTP/1.1
 
 ###
-POST https://us-central1-social-app-e7b22.cloudfunctions.net/api/screams HTTP/1.1
+POST http://localhost:5001/social-app-e7b22/us-central1/api/screams HTTP/1.1
 Content-Type: application/json
 
 {
@@ -10,7 +10,7 @@ Content-Type: application/json
 }
 
 ###
-POST https://us-central1-social-app-e7b22.cloudfunctions.net/api/signup HTTP/1.1
+POST http://localhost:5001/social-app-e7b22/us-central1/api/signup HTTP/1.1
 Content-Type: application/json
 
 {
@@ -20,4 +20,12 @@ Content-Type: application/json
     "handle": "user"
 }
 
+###
+POST http://localhost:5001/social-app-e7b22/us-central1/api/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "user@email.com",
+    "password": "23REYTHGFDG"
+}
 ###
