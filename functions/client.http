@@ -1,16 +1,17 @@
-GET http://localhost:5001/social-app-e7b22/us-central1/api/screams HTTP/1.1
+GET https://us-central1-social-app-e7b22.cloudfunctions.net/api/screams HTTP/1.1
 
 ###
-POST http://localhost:5001/social-app-e7b22/us-central1/api/screams HTTP/1.1
+POST https://us-central1-social-app-e7b22.cloudfunctions.net/api/screams HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6Ijg4ODQ4YjVhZmYyZDUyMDEzMzFhNTQ3ZDE5MDZlNWFhZGY2NTEzYzgiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc29jaWFsLWFwcC1lN2IyMiIsImF1ZCI6InNvY2lhbC1hcHAtZTdiMjIiLCJhdXRoX3RpbWUiOjE1ODg5NjIwNjAsInVzZXJfaWQiOiJ4aXZNYnJlNjlzTnFYR1B0bHlHdnVneUJPTUkyIiwic3ViIjoieGl2TWJyZTY5c05xWEdQdGx5R3Z1Z3lCT01JMiIsImlhdCI6MTU4ODk2MjA2MCwiZXhwIjoxNTg4OTY1NjYwLCJlbWFpbCI6InVzZXJAZW1haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbInVzZXJAZW1haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.cYu0w7aovLBY-4kb4BZ_1IDwH_B-N9G57HsHfJzW_QUsL8O2K1fXhL44qY3v_Xn-d-1aQwWUkVZMHoApytYdJzfVO0TpZr-LY0sWKaMaLuS7-20kQlIxmhHEl3g1i5gRenc9zRrqjRkd2kiGQsHAOBPCYY0rLLs8Qr65xRN29j8uHKSLVwusUP78bKinEnb92C2obFRWY1rEYs_m-pFT6OiKim4ccsiksyCbuCePzVrQiVIp08NwWzJ-hwQRFpvmxYGo00WgTB8GfcIxRoU9Vu6v1yJ1RDj852Cvw7QhxWiuc4PKzFSmQZX3wOZQ4lAeXLu4nUAT_a9Dwnrv30ZgPw
 
 {
     "body": "From test",
-    "userHandle": "new"
+    "userHandle": "user"
 }
 
 ###
-POST http://localhost:5001/social-app-e7b22/us-central1/api/signup HTTP/1.1
+POST https://us-central1-social-app-e7b22.cloudfunctions.net/api/signup HTTP/1.1
 Content-Type: application/json
 
 {
@@ -21,7 +22,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:5001/social-app-e7b22/us-central1/api/login HTTP/1.1
+POST https://us-central1-social-app-e7b22.cloudfunctions.net/api/login HTTP/1.1
 Content-Type: application/json
 
 {

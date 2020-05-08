@@ -28,9 +28,41 @@ app.get("/screams", (req, res) => {
     .catch((e) => console.log(e));
 });
 
-app.post("/screams", (req, res) => {
+const FBAuth = (req, res, next) => {
+  const authorization = req.headers.authorization;
+  
+  if (!authorization && !authorization.replace('Bearer ', '').length) {
+    return res.status(403).json({ error: "Unauthorized" });
+  }
+
+  let idToken = authorization.replace("Bearer ", "");
+  
+  admin
+    .auth()
+    .verifyIdToken(idToken)
+    .then((decodedToken) => {
+      console.log(decodedToken);
+      req.user = decodedToken;
+      return db
+        .collection("users")
+        .where("userId", "==", req.user.uid)
+        .limit(1)
+        .get();
+    })
+    .then((data) => {
+      req.user.handle = data.docs[0].data().handle;
+      return next();
+    })
+    .catch((e) => {
+      console.error("Error while verifying token", e);
+      return res.status(403).json(e);
+    });
+};
+
+app.post("/screams", FBAuth, (req, res) => {
   const newScream = {
-    ...req.body,
+    body: req.body.body,
+    handle: req.body.handle,
     createdAt: new Date().toISOString(),
   };
 
@@ -138,4 +170,4 @@ app.post("/login", (req, res) => {
     });
 });
 
-exports.api = functions.https.onRequest(app);
+exports.api = functions.region('us-central1').https.onRequest(app);
