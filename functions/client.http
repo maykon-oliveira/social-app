@@ -3,10 +3,10 @@ GET https://us-central1-social-app-e7b22.cloudfunctions.net/api/screams HTTP/1.1
 ###
 POST https://us-central1-social-app-e7b22.cloudfunctions.net/api/screams HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImZjMmM4YmIyNmE3OGM0M2JkODYzNzA1YjNkNzkyMWI0ZTY0MjVkNTQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc29jaWFsLWFwcC1lN2IyMiIsImF1ZCI6InNvY2lhbC1hcHAtZTdiMjIiLCJhdXRoX3RpbWUiOjE1ODg5ODI3MjYsInVzZXJfaWQiOiJ4aXZNYnJlNjlzTnFYR1B0bHlHdnVneUJPTUkyIiwic3ViIjoieGl2TWJyZTY5c05xWEdQdGx5R3Z1Z3lCT01JMiIsImlhdCI6MTU4ODk4MjcyNiwiZXhwIjoxNTg4OTg2MzI2LCJlbWFpbCI6InVzZXJAZW1haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbInVzZXJAZW1haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.um78lNSlKaIEslypCAz2kpzLWOB8KWvTT7AXdKgyPNHkVJFMdsyen3ddTy3XqE4ZZy8UIyb-hFMUnqspNyi1sDw7AtvOOoxPgTc0fOG7jb36IKrYXUHuvj9JZIK5VwQTMMKvSeLEBy8qvXU3DHh_AqqAznGRsvOFAgDyihISf7eKh6i-8eE6XE0uIOWZu2uANrasPThjwTR72H3fAdiuitS5epUgK-u7QwrykFxHvk3b1xGJLKGRa5KkokgWBkhRgcPJnX-Zymc76sFKfbyCHSMLfxdROz8oA79S1m--i1gaYzkzNAJwKGOPz1oCcoy9GSXzWJ8wlvqvpHlkn8-_Jw
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImZjMmM4YmIyNmE3OGM0M2JkODYzNzA1YjNkNzkyMWI0ZTY0MjVkNTQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc29jaWFsLWFwcC1lN2IyMiIsImF1ZCI6InNvY2lhbC1hcHAtZTdiMjIiLCJhdXRoX3RpbWUiOjE1ODkwMzQxMDEsInVzZXJfaWQiOiJoVTZpZzNvNDlKZW4yZk1RSUIwZWhJalNkM2gyIiwic3ViIjoiaFU2aWczbzQ5SmVuMmZNUUlCMGVoSWpTZDNoMiIsImlhdCI6MTU4OTAzNDEwMSwiZXhwIjoxNTg5MDM3NzAxLCJlbWFpbCI6Im1heWtvbkBlbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsibWF5a29uQGVtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.XezVaWC9qAeD3g9UNAvQhhrdZX2HBoIk6yYip9z7cuTcTf1Nc4PosvgZUm6JKGdIlsIQvQ6sYnCh_r6brSFxEt-s28skPqg-CVeSk-Q3m_2M1vIgWLqIcud23H_Zg1ZpbdXJ1A8RsC0yj3pW7Fe7KfK93x1wTdXJSwZ6-5lT-I_4ZZDnzExqxQhxlGBA6lwbrRtgEGCGNkSE_m5RCzFgL8wDYOXkkFF_PhAxdLvWUwy78-NKRWT-eGQjmmKEMMDepP_5qKQlzYwHmBboR7KyGEP6VMhVleVK4GoLTqt4i6k0io6yfpqgts1HukxeSwOxOh0kBAkvJs8CUreOaTWTUw
 
 {
-    "body": "A great scream 04"
+    "body": "A great scream 07"
 }
 
 ###
@@ -14,10 +14,10 @@ POST https://us-central1-social-app-e7b22.cloudfunctions.net/api/signup HTTP/1.1
 Content-Type: application/json
 
 {
-    "email": "user@email.com",
+    "email": "maykon@email.com",
     "password": "23REYTHGFDG",
     "confirmPassword": "23REYTHGFDG",
-    "handle": "user"
+    "handle": "maykon"
 }
 
 ###
@@ -25,7 +25,7 @@ POST https://us-central1-social-app-e7b22.cloudfunctions.net/api/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "email": "user@email.com",
+    "email": "maykon@email.com",
     "password": "23REYTHGFDG"
 }
 ###
