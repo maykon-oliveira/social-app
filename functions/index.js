@@ -11,6 +11,9 @@ app.get("/screams", Screams.list);
 app.post("/screams", FBAuth, Screams.create);
 app.get("/screams/:screamId", Screams.getOne);
 app.post("/screams/:screamId/comments", FBAuth, Screams.createComment);
+// Likes
+app.put("/screams/:screamId/like", FBAuth, Screams.likeScream);
+app.put("/screams/:screamId/unlike", FBAuth, Screams.unlikeScream);
 
 // Users
 app.post("/signup", Users.signup);
