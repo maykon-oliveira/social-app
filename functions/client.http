@@ -14,10 +14,10 @@ POST https://us-central1-social-app-e7b22.cloudfunctions.net/api/signup HTTP/1.1
 Content-Type: application/json
 
 {
-    "email": "maykon@email.com",
+    "email": "jake@email.com",
     "password": "23REYTHGFDG",
     "confirmPassword": "23REYTHGFDG",
-    "handle": "maykon"
+    "handle": "jake"
 }
 
 ###
@@ -25,7 +25,7 @@ POST https://us-central1-social-app-e7b22.cloudfunctions.net/api/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "email": "maykon@email.com",
+    "email": "jake@email.com",
     "password": "23REYTHGFDG"
 }
 ###
