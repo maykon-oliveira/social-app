@@ -9,6 +9,8 @@ const Users = require("./handlers/users");
 // Screams
 app.get("/screams", Screams.list);
 app.post("/screams", FBAuth, Screams.create);
+app.get("/screams/:screamId", Screams.getOne);
+app.post("/screams/:screamId/comments", FBAuth, Screams.createComment);
 
 // Users
 app.post("/signup", Users.signup);
