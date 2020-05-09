@@ -14,5 +14,7 @@ app.post("/screams", FBAuth, Screams.create);
 app.post("/signup", Users.signup);
 app.post("/login", Users.login);
 app.post("/users/image", FBAuth, Users.uploadImage);
+app.post("/users", FBAuth, Users.addUserDetails);
+app.get("/users", FBAuth, Users.retriveAuthenticatedUser);
 
 exports.api = functions.region("us-central1").https.onRequest(app);

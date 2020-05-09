@@ -2,6 +2,7 @@ const { db, admin } = require("../utils/admin");
 const {
   validateSignupData,
   validateLoginData,
+  reduceUserDetails,
 } = require("../utils/validations");
 const firebase = require("firebase");
 const firebaseConfig = require("../utils/config");
@@ -129,8 +130,48 @@ const uploadImage = (req, res) => {
   busboy.end(req.rawBody);
 };
 
+const addUserDetails = (req, res) => {
+  const userDetails = reduceUserDetails(req.body);
+
+  db.doc(`/users/${req.user.handle}`)
+    .update(userDetails)
+    .then(() => res.json("Details added successfully"))
+    .catch((e) => {
+      console.log(e);
+      return res.status(500).json({ error: e.code });
+    });
+};
+
+const retriveAuthenticatedUser = (req, res) => {
+  const userData = {};
+  db.doc(`/users/${req.user.handle}`)
+    .get()
+    .then((user) => {
+      if (user.exists) {
+        userData.credentials = user.data();
+        return db
+          .collection("likes")
+          .where("userHandle", "==", req.user.handle)
+          .get();
+      }
+    })
+    .then((data) => {
+      userData.likes = [];
+      data.forEach((doc) => {
+        userData.likes.push(doc.data());
+      });
+      return res.json(userData);
+    })
+    .catch((e) => {
+      console.log(e);
+      return res.status(500).json({ error: e.code });
+    });
+};
+
 module.exports = {
   signup,
   login,
   uploadImage,
+  addUserDetails,
+  retriveAuthenticatedUser,
 };
