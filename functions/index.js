@@ -10,6 +10,7 @@ const Users = require("./handlers/users");
 app.get("/screams", Screams.list);
 app.post("/screams", FBAuth, Screams.create);
 app.get("/screams/:screamId", Screams.getOne);
+app.delete("/screams/:screamId", FBAuth, Screams.remove);
 app.post("/screams/:screamId/comments", FBAuth, Screams.createComment);
 // Likes
 app.put("/screams/:screamId/like", FBAuth, Screams.likeScream);
