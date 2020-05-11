@@ -160,11 +160,70 @@ const retriveAuthenticatedUser = (req, res) => {
       data.forEach((doc) => {
         userData.likes.push(doc.data());
       });
+      return db
+        .collection("notifications")
+        .where("recipient", "==", req.user.handle)
+        .orderBy("createdAt", "desc")
+        .limit(10)
+        .get();
+    })
+    .then((data) => {
+      userData.notifications = [];
+      data.forEach((doc) => {
+        userData.notifications.push({ ...doc.data(), notificationId: doc.id });
+      });
       return res.json(userData);
     })
     .catch((e) => {
       console.log(e);
       return res.status(500).json({ error: e.code });
+    });
+};
+
+const retriveHandleDetails = (req, res) => {
+  const userData = {};
+  db.doc(`/users/${req.params.handle}`)
+    .get()
+    .then((user) => {
+      if (user.exists) {
+        userData.user = user.data();
+
+        return db
+          .collection("screams")
+          .where("userHandle", "==", req.params.handle)
+          .orderBy("createdAt", "desc")
+          .get();
+      }
+      return res.status(404).json({ error: "User not found" });
+    })
+    .then((data) => {
+      userData.screams = [];
+      data.forEach((doc) => {
+        userData.screams.push({ ...doc.data(), screamId: doc.id });
+      });
+      return res.json(userData);
+    })
+    .catch((e) => {
+      console.log(e);
+      return res.status(500).json({ error: e.code });
+    });
+};
+
+const markNotifications = (req, res) => {
+  const batch = db.batch();
+
+  req.body.forEach((id) => {
+    const doc = db.doc(`/notifications/${id}`);
+    batch.update(doc, { read: true });
+  });
+  batch
+    .commit()
+    .then(() => {
+      return res.json({ message: "Notificarions marked as read" });
+    })
+    .catch((e) => {
+      console.error(e);
+      return ers.status(500).json({ error: e.code });
     });
 };
 
@@ -174,4 +233,6 @@ module.exports = {
   uploadImage,
   addUserDetails,
   retriveAuthenticatedUser,
+  retriveHandleDetails,
+  markNotifications,
 };
