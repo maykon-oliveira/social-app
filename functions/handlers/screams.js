@@ -12,6 +12,7 @@ const list = (req, res) => {
           body: data.data().body,
           userHandle: data.data().userHandle,
           createdAt: data.data().createdAt,
+          userImage: data.data().userImage,
         }))
       )
     )
@@ -81,7 +82,7 @@ const getOne = (req, res) => {
 const createComment = (req, res) => {
   const screamId = req.params.screamId;
   if (isEmpty(req.body))
-    return res.status(400).json({ error: "Must not be empty" });
+    return res.status(400).json({ comment: "Must not be empty" });
 
   const newComment = {
     body: req.body.body,

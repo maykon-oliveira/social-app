@@ -50,11 +50,10 @@ const signup = (req, res) => {
     })
     .then(() => res.status(201).json({ token }))
     .catch((e) => {
-      console.log(e);
       if (e.code === "auth/email-alread-in-use") {
         return res.status(400).json({ email: "Email already in use" });
       }
-      return res.status(500).json({ error: e.code });
+      return res.status(500).json({ general: "Something went wrong" });
     });
 };
 
@@ -73,13 +72,7 @@ const login = (req, res) => {
     .then(({ user }) => user.getIdToken())
     .then((token) => res.json({ token }))
     .catch((e) => {
-      console.log(e);
-      if (e.code === "auth/wrong-password") {
-        return res
-          .status(403)
-          .json({ general: "Wrong credentials, please try again" });
-      }
-      return res.status(500).json({ error: e.code });
+      return res.status(500).json({ general: 'Wrong credentials' });
     });
 };
 
