@@ -2,11 +2,15 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { Card, CardMedia, CardContent, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 const styles = {
   card: {
     display: "flex",
     marginBottom: 20,
+    border: '1px solid #e0e0e0',
+    boxShadow: 'none'
   },
   image: {
     minWidth: 200,
@@ -26,6 +30,7 @@ const Scream = ({
   scream: { userImage, body, createdAt, userHandle },
   classes,
 }) => {
+  dayjs.extend(relativeTime);
   return (
     <Card className={classes.card}>
       <CardMedia
@@ -39,12 +44,12 @@ const Scream = ({
             color="primary"
             variant="h5"
             component={Link}
-            to={`/users${userHandle}`}
+            to={`/users/${userHandle}`}
           >
             {userHandle}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            {createdAt}
+            {dayjs(createdAt).fromNow()}
           </Typography>
           <Typography variant="body2">{body}</Typography>
         </CardContent>

@@ -6,11 +6,15 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import "./App.css";
 
 import { Home } from "./pages/Home";
-import { Login } from "./pages/Login";
+import Login from "./pages/Login";
 import { Signup } from "./pages/Signup";
 import { Navbar } from "./components/Navbar";
 
-const theme = createMuiTheme({});
+const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true
+  }
+});
 
 function App() {
   return (
