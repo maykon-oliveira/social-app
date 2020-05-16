@@ -3,7 +3,8 @@ import { withStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import { Grid, TextField, Button, Typography } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Axios from "axios";
+import { connect } from "react-redux";
+import { loginUser } from "../store/actions/users";
 
 const styles = ({
   form,
@@ -21,31 +22,23 @@ const styles = ({
   error,
 });
 
-const Login = ({ history, classes }) => {
+const Login = ({
+  history,
+  classes,
+  loginUser: login,
+  ui: { loading, errors },
+}) => {
   const [form, setForm] = useState({
     email: "maykon@email.com",
-    password: "",
+    password: "23REYTHGFDG",
   });
-  const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
 
   const onChange = ({ target: { name, value } }) =>
     setForm({ ...form, [name]: value });
+
   const onSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    Axios.post("/login", form)
-      .then(({ jwt }) => jwt)
-      .then((jwt) => sessionStorage.setItem("FBjwt", jwt))
-      .then(() => {
-        history.push("/");
-        setLoading(false);
-      })
-      .catch((e) => {
-        console.log(e);
-        setErrors(e.response.data);
-        setLoading(false);
-      });
+    login(form, history);
   };
 
   return (
@@ -110,4 +103,10 @@ const Login = ({ history, classes }) => {
   );
 };
 
-export default withStyles(styles)(Login);
+const mapStateToProps = (state) => ({ user: state.user, ui: state.ui });
+const mapActionsToPros = { loginUser };
+
+export default connect(
+  mapStateToProps,
+  mapActionsToPros
+)(withStyles(styles)(Login));

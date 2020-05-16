@@ -3,14 +3,17 @@ import { Route, Switch, BrowserRouter } from "react-router-dom";
 
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
-import "./App.css";
 import jwtDecode from "jwt-decode";
+import { Provider } from "react-redux";
+import store from "./store";
 
 import { Home } from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import AuthRoute from "./utils/AuthRoute";
 import { Navbar } from "./components/Navbar";
+
+import "./App.css";
 
 const theme = createMuiTheme({
   typography: {
@@ -54,28 +57,32 @@ if (token) {
 function App() {
   return (
     <MuiThemeProvider theme={theme}>
-      <div className="App">
-        <BrowserRouter>
-          <Navbar />
-          <div className="container">
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <AuthRoute
-                exact
-                path="/login"
-                component={Login}
-                autheticated={autheticated}
-              />
-              <AuthRoute
-                exact
-                path="/signup"
-                component={Signup}
-                autheticated={autheticated}
-              />
-            </Switch>
-          </div>
-        </BrowserRouter>
-      </div>
+      <Provider store={store}>
+        <div className="App">
+          <BrowserRouter>
+            <Navbar />
+            <div className="container">
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/signup" component={Signup} />
+                {/* <AuthRoute
+                  exact
+                  path="/login"
+                  component={Login}
+                  autheticated={autheticated}
+                />
+                <AuthRoute
+                  exact
+                  path="/signup"
+                  component={Signup}
+                  autheticated={autheticated}
+                /> */}
+              </Switch>
+            </div>
+          </BrowserRouter>
+        </div>
+      </Provider>
     </MuiThemeProvider>
   );
 }
