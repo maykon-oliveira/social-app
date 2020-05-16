@@ -5,35 +5,25 @@ import { Grid, TextField, Button, Typography } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Axios from "axios";
 
-const styles = {
-  form: {
-    textAlign: "center",
-  },
-  pageTitle: {
-    margin: "10px auto",
-  },
-  textField: {
-    margin: "10px auto",
-  },
-  wrapper: {
-    position: "relative",
-    margin: "10px auto",
-  },
-  buttonProgress: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    marginTop: -12,
-    marginLeft: -12,
-  },
-  error: {
-    marginBottom: 10,
-  },
-};
+const styles = ({
+  form,
+  pageTitle,
+  textField,
+  wrapper,
+  buttonProgress,
+  error,
+}) => ({
+  form,
+  pageTitle,
+  textField,
+  wrapper,
+  buttonProgress,
+  error,
+});
 
 const Login = ({ history, classes }) => {
   const [form, setForm] = useState({
-    email: "",
+    email: "maykon@email.com",
     password: "",
   });
   const [errors, setErrors] = useState({});
@@ -46,6 +36,7 @@ const Login = ({ history, classes }) => {
     setLoading(true);
     Axios.post("/login", form)
       .then(({ jwt }) => jwt)
+      .then((jwt) => sessionStorage.setItem("FBjwt", jwt))
       .then(() => {
         history.push("/");
         setLoading(false);
