@@ -23,7 +23,7 @@ const styles = ({
   error,
 });
 
-const Login = ({ classes, login, ui: { loading, errors } }) => {
+const Login = ({ classes, login, user: { loading }, ui: { errors } }) => {
   const [loginForm, setLoginForm] = useState({
     email: "maykon@email.com",
     password: "23REYTHGFDG",
@@ -33,7 +33,7 @@ const Login = ({ classes, login, ui: { loading, errors } }) => {
     setLoginForm({ ...loginForm, [name]: value });
 
   const onSubmit = (e) => {
-    e.preventDefault();    
+    e.preventDefault();
     login(loginForm);
   };
 

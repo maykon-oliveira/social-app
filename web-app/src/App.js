@@ -1,11 +1,13 @@
 import React from "react";
-import { Route, Switch, BrowserRouter } from "react-router-dom";
+import { Route, Switch, Router } from "react-router-dom";
 
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import jwtDecode from "jwt-decode";
 import { Provider } from "react-redux";
 import store from "./store";
+
+import history from "./utils/history";
 
 import { Home } from "./pages/Home";
 import Login from "./pages/Login";
@@ -59,7 +61,7 @@ function App() {
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
         <div className="App">
-          <BrowserRouter>
+          <Router history={history}>
             <Navbar />
             <div className="container">
               <Switch>
@@ -80,7 +82,7 @@ function App() {
                 /> */}
               </Switch>
             </div>
-          </BrowserRouter>
+          </Router>
         </div>
       </Provider>
     </MuiThemeProvider>

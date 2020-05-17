@@ -3,6 +3,7 @@ import { createReducer, createActions } from "reduxsauce";
 export const { Types, Creators } = createActions({
   login: ["credentials"],
   loginComplete: ["user"],
+  loginFailure: ["user"],
   fetchUserDetails: [],
 });
 
@@ -21,6 +22,12 @@ const loginComplete = (state = INITIAL_STATE, { payload }) => ({
   authenticated: true,
 });
 
+const loginFailure = (state = INITIAL_STATE) => ({
+  ...state,
+  loading: false,
+  authenticated: false,
+});
+
 const loading = (state = INITIAL_STATE) => ({
   ...state,
   loading: true,
@@ -29,4 +36,5 @@ const loading = (state = INITIAL_STATE) => ({
 export default createReducer(INITIAL_STATE, {
   [Types.LOGIN]: loading,
   [Types.LOGIN_COMPLETE]: loginComplete,
+  [Types.LOGIN_FAILURE]: loginFailure,
 });
