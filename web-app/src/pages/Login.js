@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { Grid, TextField, Button, Typography } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { connect } from "react-redux";
-import { loginUser } from "../store/actions/users";
+import { bindActionCreators } from "redux";
+import { Creators as UserCreators } from "../store/ducks/user";
 
 const styles = ({
   form,
@@ -22,23 +23,18 @@ const styles = ({
   error,
 });
 
-const Login = ({
-  history,
-  classes,
-  loginUser: login,
-  ui: { loading, errors },
-}) => {
-  const [form, setForm] = useState({
+const Login = ({ classes, login, ui: { loading, errors } }) => {
+  const [loginForm, setLoginForm] = useState({
     email: "maykon@email.com",
     password: "23REYTHGFDG",
   });
 
   const onChange = ({ target: { name, value } }) =>
-    setForm({ ...form, [name]: value });
+    setLoginForm({ ...loginForm, [name]: value });
 
   const onSubmit = (e) => {
-    e.preventDefault();
-    login(form, history);
+    e.preventDefault();    
+    login(loginForm);
   };
 
   return (
@@ -59,7 +55,7 @@ const Login = ({
             className={classes.textField}
             fullWidth
             onChange={onChange}
-            value={form.email}
+            value={loginForm.email}
           ></TextField>
           <TextField
             id="password"
@@ -71,7 +67,7 @@ const Login = ({
             className={classes.textField}
             fullWidth
             onChange={onChange}
-            value={form.password}
+            value={loginForm.password}
           ></TextField>
           {errors.general && (
             <Typography className={classes.error} color="error">
@@ -104,9 +100,10 @@ const Login = ({
 };
 
 const mapStateToProps = (state) => ({ user: state.user, ui: state.ui });
-const mapActionsToPros = { loginUser };
+const mapDispatchToPros = (dispatch) =>
+  bindActionCreators(UserCreators, dispatch);
 
 export default connect(
   mapStateToProps,
-  mapActionsToPros
+  mapDispatchToPros
 )(withStyles(styles)(Login));

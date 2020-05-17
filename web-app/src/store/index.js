@@ -1,26 +1,22 @@
-import { createStore, combineReducers, applyMiddleware, compose } from "redux";
-import thunk from "redux-thunk";
+import { createStore, applyMiddleware, compose } from "redux";
+import createSagaMiddleware from "redux-saga";
 
-import userReducer from "./reducers/users";
-import dataReducer from "./reducers/data";
-import uiReducer from "./reducers/ui";
+import reducers from "./ducks";
+import UserSaga from "./sagas/user";
 
-const initialState = {};
+const sagaMiddleware = createSagaMiddleware();
 
-const middleware = [thunk];
-
-const reducers = combineReducers({
-  user: userReducer,
-  data: dataReducer,
-  ui: uiReducer,
-});
+const middlewares = [sagaMiddleware];
 
 const composeEnhancers =
   typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
     : compose;
 
-const enhancer = composeEnhancers(applyMiddleware(...middleware));
-const store = createStore(reducers, initialState, enhancer);
+const enhancer = composeEnhancers(applyMiddleware(...middlewares));
+
+const store = createStore(reducers, enhancer);
+
+sagaMiddleware.run(UserSaga);
 
 export default store;
