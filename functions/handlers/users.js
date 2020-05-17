@@ -9,7 +9,6 @@ const firebaseConfig = require("../utils/config");
 
 firebase.initializeApp(firebaseConfig);
 
-let token, userId;
 const signup = (req, res) => {
   const newUser = {
     email: req.body.email,
@@ -19,26 +18,29 @@ const signup = (req, res) => {
   };
 
   const { valid, errors } = validateSignupData(newUser);
-  if (!valid) return res.status(404).json(errors);
+
+  if (!valid) return res.status(400).json(errors);
 
   const noImg = "no-img.png";
 
+  let token, userId;
   db.doc(`/users/${newUser.handle}`)
     .get()
     .then((doc) => {
       if (doc.exists) {
         return res.status(400).json({ handle: "this handle is already taken" });
+      } else {
+        return firebase
+          .auth()
+          .createUserWithEmailAndPassword(newUser.email, newUser.password);
       }
-      return firebase
-        .auth()
-        .createUserWithEmailAndPassword(newUser.email, newUser.password);
     })
     .then((data) => {
       userId = data.user.uid;
-      data.user.getIdToken();
+      return data.user.getIdToken();
     })
-    .then((t) => {
-      token = t;
+    .then((idToken) => {
+      token = idToken;
       const userCredentials = {
         handle: newUser.handle,
         email: newUser.email,
@@ -48,15 +50,20 @@ const signup = (req, res) => {
       };
       return db.doc(`/users/${newUser.handle}`).set(userCredentials);
     })
-    .then(() => res.status(201).json({ token }))
-    .catch((e) => {
-      if (e.code === "auth/email-alread-in-use") {
-        return res.status(400).json({ email: "Email already in use" });
+    .then(() => {
+      return res.status(201).json({ token });
+    })
+    .catch((err) => {
+      console.error(err);
+      if (err.code === "auth/email-already-in-use") {
+        return res.status(400).json({ email: "Email is already is use" });
+      } else {
+        return res
+          .status(500)
+          .json({ general: "Something went wrong, please try again" });
       }
-      return res.status(500).json({ general: "Something went wrong" });
     });
 };
-
 const login = (req, res) => {
   const user = {
     email: req.body.email,
@@ -72,7 +79,7 @@ const login = (req, res) => {
     .then(({ user }) => user.getIdToken())
     .then((token) => res.json({ token }))
     .catch((e) => {
-      return res.status(500).json({ general: 'Wrong credentials' });
+      return res.status(500).json({ general: "Wrong credentials" });
     });
 };
 

@@ -4,6 +4,7 @@ import { takeEvery, call, put } from "redux-saga/effects";
 import Axios from "axios";
 import history from "../../utils/history";
 
+// Login
 function* login({ credentials }) {
   try {
     const { data } = yield call(Axios.post, "/login", credentials);
@@ -25,7 +26,31 @@ function* fetchUserDetails() {
   history.push("/");
 }
 
+// Signup
+function* signup({ form }) {
+  try {
+    const { data } = yield call(Axios.post, "/signup", form);
+
+    sessionStorage.setItem("FBjwt", data.token);
+    Axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+
+    yield put({ type: UserTypes.FETCH_USER_DETAILS });
+  } catch ({ response }) {
+    yield put({ type: UserTypes.LOGIN_FAILURE });
+    yield put({ type: UITypes.SET_ERRORS, payload: response.data });
+  }
+}
+
+function* logout() {
+  sessionStorage.removeItem("FBjwt");
+  delete Axios.defaults.headers.common["Authorization"];
+  history.push("/login");
+  yield put({ type: UserTypes.LOGOUT_COMPLETE });
+}
+
 export default function* root() {
   yield takeEvery(UserTypes.LOGIN, login);
   yield takeEvery(UserTypes.FETCH_USER_DETAILS, fetchUserDetails);
+  yield takeEvery(UserTypes.SIGNUP, signup);
+  yield takeEvery(UserTypes.LOGOUT, logout);
 }

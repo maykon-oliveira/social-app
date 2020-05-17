@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { Grid, TextField, Button, Typography } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Axios from "axios";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { Creators as UserCreators } from "../store/ducks/user";
 
 const styles = ({
   form,
@@ -20,33 +22,20 @@ const styles = ({
   error,
 });
 
-const Signup = ({ history, classes }) => {
-  const [form, setForm] = useState({
+const Signup = ({ classes, signup, user: { loading }, ui: { errors } }) => {
+  const [signupForm, setSignupForm] = useState({
     email: "",
     password: "",
     confirmPassword: "",
     handle: "",
   });
-  const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
 
   const onChange = ({ target: { name, value } }) =>
-    setForm({ ...form, [name]: value });
+    setSignupForm({ ...signupForm, [name]: value });
+
   const onSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    Axios.post("/signup", form)
-      .then(({ token }) => token)
-      .then((token) => sessionStorage.setItem("FBToken", token))
-      .then(() => {
-        history.push("/");
-        setLoading(false);
-      })
-      .catch((e) => {
-        console.log(e);
-        setErrors(e.response.data);
-        setLoading(false);
-      });
+    signup(signupForm);
   };
 
   return (
@@ -67,7 +56,7 @@ const Signup = ({ history, classes }) => {
             className={classes.textField}
             fullWidth
             onChange={onChange}
-            value={form.handle}
+            value={signupForm.handle}
           ></TextField>
           <TextField
             id="email"
@@ -79,7 +68,7 @@ const Signup = ({ history, classes }) => {
             className={classes.textField}
             fullWidth
             onChange={onChange}
-            value={form.email}
+            value={signupForm.email}
           ></TextField>
           <TextField
             id="password"
@@ -91,7 +80,7 @@ const Signup = ({ history, classes }) => {
             className={classes.textField}
             fullWidth
             onChange={onChange}
-            value={form.password}
+            value={signupForm.password}
           ></TextField>
           <TextField
             id="confirmPassword"
@@ -103,7 +92,7 @@ const Signup = ({ history, classes }) => {
             className={classes.textField}
             fullWidth
             onChange={onChange}
-            value={form.confirmPassword}
+            value={signupForm.confirmPassword}
           ></TextField>
           {errors.general && (
             <Typography className={classes.error} color="error">
@@ -130,4 +119,11 @@ const Signup = ({ history, classes }) => {
   );
 };
 
-export default withStyles(styles)(Signup);
+const mapStateToProps = (state) => ({ user: state.user, ui: state.ui });
+const mapDispatchToPros = (dispatch) =>
+  bindActionCreators(UserCreators, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToPros
+)(withStyles(styles)(Signup));
