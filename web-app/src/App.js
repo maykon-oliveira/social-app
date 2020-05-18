@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Switch, Router } from "react-router-dom";
 
 import { MuiThemeProvider } from "@material-ui/core/styles";
@@ -6,6 +6,7 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import jwtDecode from "jwt-decode";
 import { Provider } from "react-redux";
 import store from "./store";
+import { TOKEN_KEY, Types } from "./store/ducks/user";
 
 import history from "./utils/history";
 
@@ -16,6 +17,7 @@ import AuthRoute from "./utils/AuthRoute";
 import { Navbar } from "./components/Navbar";
 
 import "./App.css";
+import Axios from "axios";
 
 const theme = createMuiTheme({
   typography: {
@@ -46,17 +48,22 @@ const theme = createMuiTheme({
   },
 });
 
-const token = sessionStorage.getItem("FBToken");
-let autheticated = false;
-if (token) {
-  const decoded = jwtDecode(token);
-  autheticated = decoded.exp * 1000 < Date.now();
-  if (!autheticated) {
-    window.location.href = "/login";
-  }
-}
-
 function App() {
+  useEffect(() => {
+    const token = sessionStorage.getItem(TOKEN_KEY);
+
+    if (token) {
+      const decoded = jwtDecode(token);
+
+      if (decoded.exp * 1000 < Date.now()) {
+        store.dispatch({ type: Types.LOGOUT });
+      } else {
+        Axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        store.dispatch({ type: Types.FETCH_USER_DETAILS });
+      }
+    }
+  }, []);
+
   return (
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
@@ -66,20 +73,8 @@ function App() {
             <div className="container">
               <Switch>
                 <Route exact path="/" component={Home} />
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/signup" component={Signup} />
-                {/* <AuthRoute
-                  exact
-                  path="/login"
-                  component={Login}
-                  autheticated={autheticated}
-                />
-                <AuthRoute
-                  exact
-                  path="/signup"
-                  component={Signup}
-                  autheticated={autheticated}
-                /> */}
+                <AuthRoute exact path="/login" component={Login} />
+                <AuthRoute exact path="/signup" component={Signup} />
               </Switch>
             </div>
           </Router>

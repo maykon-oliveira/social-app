@@ -1,4 +1,4 @@
-import { Types as UserTypes } from "../ducks/user";
+import { Types as UserTypes, TOKEN_KEY } from "../ducks/user";
 import { Types as UITypes } from "../ducks/ui";
 import { takeEvery, call, put } from "redux-saga/effects";
 import Axios from "axios";
@@ -9,7 +9,7 @@ function* login({ credentials }) {
   try {
     const { data } = yield call(Axios.post, "/login", credentials);
 
-    sessionStorage.setItem("FBjwt", data.token);
+    sessionStorage.setItem(TOKEN_KEY, data.token);
     Axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
 
     yield put({ type: UserTypes.FETCH_USER_DETAILS });
@@ -31,7 +31,7 @@ function* signup({ form }) {
   try {
     const { data } = yield call(Axios.post, "/signup", form);
 
-    sessionStorage.setItem("FBjwt", data.token);
+    sessionStorage.setItem(TOKEN_KEY, data.token);
     Axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
 
     yield put({ type: UserTypes.FETCH_USER_DETAILS });
@@ -42,7 +42,7 @@ function* signup({ form }) {
 }
 
 function* logout() {
-  sessionStorage.removeItem("FBjwt");
+  sessionStorage.removeItem(TOKEN_KEY);
   delete Axios.defaults.headers.common["Authorization"];
   history.push("/login");
   yield put({ type: UserTypes.LOGOUT_COMPLETE });

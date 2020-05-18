@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import Scream from "../components/Scream";
 import Axios from "axios";
+import Profile from "../components/Profile";
 
 export const Home = () => {
   const [screams, setScreams] = useState([]);
@@ -25,7 +26,7 @@ export const Home = () => {
         )}
       </Grid>
       <Grid item sm={4} xs={12}>
-        <p>Profile</p>
+        <Profile />
       </Grid>
     </Grid>
   );

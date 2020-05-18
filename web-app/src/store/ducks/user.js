@@ -1,5 +1,7 @@
 import { createReducer, createActions } from "reduxsauce";
 
+export const TOKEN_KEY = "FBToken";
+
 export const { Types, Creators } = createActions({
   login: ["credentials"],
   loginComplete: ["user"],

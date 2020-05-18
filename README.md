@@ -2,8 +2,10 @@
 
 Tecnologias e ferramentas usadas:
 
-- Firebase
-- ReactJS
+- [Firebase](https://firebase.google.com/)
+- [React](https://reactjs.org/)
+- [Redux](https://redux.js.org/faq/organizing-state)
+- [Redux Saga](https://redux-saga.js.org/)
 
 Funcionalidades:
 
