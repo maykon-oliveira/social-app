@@ -48,9 +48,15 @@ function* logout() {
   yield put({ type: UserTypes.LOGOUT_COMPLETE });
 }
 
+function* uploadUserImage({ form }) {
+  yield call(Axios.post, "/users/image", form);
+  yield put({ type: UserTypes.FETCH_USER_DETAILS });
+}
+
 export default function* root() {
   yield takeEvery(UserTypes.LOGIN, login);
   yield takeEvery(UserTypes.FETCH_USER_DETAILS, fetchUserDetails);
   yield takeEvery(UserTypes.SIGNUP, signup);
   yield takeEvery(UserTypes.LOGOUT, logout);
+  yield takeEvery(UserTypes.UPLOAD_USER_IMAGE, uploadUserImage);
 }

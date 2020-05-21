@@ -10,6 +10,7 @@ export const { Types, Creators } = createActions({
   signup: ["form"],
   logout: [],
   logoutComplete: [],
+  uploadUserImage: ["form"],
 });
 
 const INITIAL_STATE = {

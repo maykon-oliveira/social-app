@@ -1,24 +1,37 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { Creators as UserCreators } from "../store/ducks/user";
 
 import { withStyles } from "@material-ui/core/styles";
-import { Paper, Link as MLink, Typography, Button } from "@material-ui/core";
-import Skeleton from "@material-ui/lab/Skeleton";
 import {
-  LocationOn,
-  Link as LinkIcon,
-  CalendarToday,
-} from "@material-ui/icons";
+  Paper,
+  IconButton,
+  Link as MLink,
+  Typography,
+  Button,
+} from "@material-ui/core";
+import { Edit } from "@material-ui/icons";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 import dayjs from "dayjs";
+import "./profile.css";
 
 const styles = {};
 
 const Profile = ({
   user: { credentials, loading, authenticated },
+  uploadUserImage,
   classes,
 }) => {
+  const onImageChange = ({ target: { files } }) => {
+    const img = files[0];
+    const formData = new FormData();
+    formData.append("image", img, img.name);
+    uploadUserImage(formData);
+  };
+
   return loading ? (
     <>
       <span style={{ display: "flex", justifyContent: "center" }}>
@@ -29,48 +42,29 @@ const Profile = ({
       <Skeleton variant="text" width={80} />
     </>
   ) : authenticated ? (
-    <Paper>
+    <div className="card-container">
       <div>
-        <img src={credentials.imageUrl} alt="profile" />
-      </div>
-      <div>
-        <MLink
-          component={Link}
-          to={`/usser/${credentials.handle}`}
-          color="primary"
-          variant="h5"
+        <img className="round" src={credentials.imageUrl} alt="profile" />
+        <input id="imgInput" type="file" onChange={onImageChange} hidden />
+        <IconButton
+          style={{ position: "absolute" }}
+          color="secondary"
+          onClick={() => {
+            document.getElementById("imgInput").click();
+          }}
         >
-          @{credentials.handle}
-        </MLink>
+          <Edit />
+        </IconButton>
       </div>
-      <div>
-        {credentials.bio && (
-          <Typography variant="body2">{credentials.bio}</Typography>
-        )}
-      </div>
-      <div>
-        {credentials.location && (
-          <>
-            <LocationOn color="primary" />
-            <span>{credentials.location}</span>
-          </>
-        )}
-      </div>
-      <div>
-        {credentials.website && (
-          <>
-            <LinkIcon color="primary" />
-            <a href={credentials.website} rel="" target="_black">
-              {credentials.website}
-            </a>
-          </>
-        )}
-      </div>
-      <div>
-        <CalendarToday color="primary" />
-        Joined {dayjs(credentials.createdAt).format("MMM YYYY")}
-      </div>
-    </Paper>
+      <h3>
+        <MLink to={`/user/${credentials.handle}`}>@{credentials.handle}</MLink>
+      </h3>
+      <h6>{credentials.location}</h6>
+      <p>{credentials.bio}</p>
+      <p className="createdAt">
+        Joined at {dayjs(credentials.createdAt).format("MMM YYYY")}
+      </p>
+    </div>
   ) : (
     <Paper>
       <Typography variant="h5" align="center">
@@ -86,6 +80,11 @@ const Profile = ({
   );
 };
 
+const mapDispatchToPros = (dispatch) =>
+  bindActionCreators(UserCreators, dispatch);
 const mapStateToProps = (state) => ({ user: state.user });
 
-export default connect(mapStateToProps)(withStyles(styles)(Profile));
+export default connect(
+  mapStateToProps,
+  mapDispatchToPros
+)(withStyles(styles)(Profile));
