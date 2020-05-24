@@ -11,6 +11,7 @@ export const { Types, Creators } = createActions({
   logout: [],
   logoutComplete: [],
   uploadUserImage: ["form"],
+  editProfile: ["profile"],
 });
 
 const INITIAL_STATE = {
@@ -43,8 +44,10 @@ const logoutComplete = (state = INITIAL_STATE) => INITIAL_STATE;
 
 export default createReducer(INITIAL_STATE, {
   [Types.LOGIN]: loading,
+  [Types.FETCH_USER_DETAILS]: loading,
   [Types.LOGIN_COMPLETE]: loginComplete,
   [Types.LOGIN_FAILURE]: loginFailure,
   [Types.SIGNUP]: loading,
   [Types.LOGOUT_COMPLETE]: logoutComplete,
+  [Types.EDIT_PROFILE]: loading,
 });

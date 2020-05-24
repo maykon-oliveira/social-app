@@ -11,9 +11,11 @@ import {
   Link as MLink,
   Typography,
   Button,
+  Tooltip,
 } from "@material-ui/core";
-import { Edit } from "@material-ui/icons";
+import { Edit, KeyboardReturn } from "@material-ui/icons";
 import Skeleton from "@material-ui/lab/Skeleton";
+import EditProfile from "./EditProfile";
 
 import dayjs from "dayjs";
 import "./profile.css";
@@ -23,6 +25,7 @@ const styles = {};
 const Profile = ({
   user: { credentials, loading, authenticated },
   uploadUserImage,
+  logout,
   classes,
 }) => {
   const onImageChange = ({ target: { files } }) => {
@@ -61,9 +64,13 @@ const Profile = ({
       </h3>
       <h6>{credentials.location}</h6>
       <p>{credentials.bio}</p>
-      <p className="createdAt">
-        Joined at {dayjs(credentials.createdAt).format("MMM YYYY")}
-      </p>
+      <p>Joined at {dayjs(credentials.createdAt).format("MMM YYYY")}</p>
+      <Tooltip title="Logout" placement="top">
+        <IconButton onClick={() => logout()}>
+          <KeyboardReturn color="primary"></KeyboardReturn>
+        </IconButton>
+      </Tooltip>
+      <EditProfile/>
     </div>
   ) : (
     <Paper>

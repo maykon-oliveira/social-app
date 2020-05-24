@@ -100,26 +100,23 @@ exports.createNotificationOnComment = functions
 
 exports.onUserImageChange = functions
   .region("us-central1")
-  .firestore.document("/user/{userId}")
+  .firestore.document("/users/{userId}")
   .onUpdate((change) => {
-    const before = change.before.data();
-    const after = change.after.data();
-
-    if (before.imageUrl == after.imageUrl) return;
-
-    const batch = db.batch();
-
-    return db
-      .collection("screams")
-      .where("userHandle", "==", before.handle)
-      .get()
-      .then((data) => {
-        data.forEach((doc) => {
-          const scream = db.doc(`/screams/${doc.id}`);
-          batch.update(scream, { userImage: after.imageUrl });
+    if (change.before.data().imageUrl !== change.after.data().imageUrl) {
+      console.log("image has changed");
+      const batch = db.batch();
+      return db
+        .collection("screams")
+        .where("userHandle", "==", change.before.data().handle)
+        .get()
+        .then((data) => {
+          data.forEach((doc) => {
+            const scream = db.doc(`/screams/${doc.id}`);
+            batch.update(scream, { userImage: change.after.data().imageUrl });
+          });
+          return batch.commit();
         });
-        return batch.commit();
-      });
+    } else return true;
   });
 
 exports.onScreamDelete = functions

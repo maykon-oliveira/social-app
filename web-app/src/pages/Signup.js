@@ -49,7 +49,7 @@ const Signup = ({ classes, signup, user: { loading }, ui: { errors } }) => {
           <TextField
             id="handle"
             name="handle"
-            type="handle"
+            type="text"
             label="Handle"
             helperText={errors.handle}
             error={!!errors.handle}
