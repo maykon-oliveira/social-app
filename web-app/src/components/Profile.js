@@ -11,7 +11,6 @@ import {
   Link as MLink,
   Typography,
   Button,
-  Tooltip,
 } from "@material-ui/core";
 import { Edit, KeyboardReturn } from "@material-ui/icons";
 import Skeleton from "@material-ui/lab/Skeleton";
@@ -19,6 +18,7 @@ import EditProfile from "./EditProfile";
 
 import dayjs from "dayjs";
 import "./profile.css";
+import TooltipIconButton from "./TooltipIconButton";
 
 const styles = {};
 
@@ -65,12 +65,10 @@ const Profile = ({
       <h6>{credentials.location}</h6>
       <p>{credentials.bio}</p>
       <p>Joined at {dayjs(credentials.createdAt).format("MMM YYYY")}</p>
-      <Tooltip title="Logout" placement="top">
-        <IconButton onClick={() => logout()}>
-          <KeyboardReturn color="primary"></KeyboardReturn>
-        </IconButton>
-      </Tooltip>
-      <EditProfile/>
+      <TooltipIconButton title="Logout" onClick={logout}>
+        <KeyboardReturn color="primary"></KeyboardReturn>
+      </TooltipIconButton>
+      <EditProfile />
     </div>
   ) : (
     <Paper>

@@ -4,8 +4,6 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Creators as UserCreators } from "../store/ducks/user";
 import {
-  Tooltip,
-  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -15,6 +13,7 @@ import {
   DialogActions,
 } from "@material-ui/core";
 import { Edit as EditIcon } from "@material-ui/icons";
+import TooltipIconButton from "./TooltipIconButton";
 
 const styles = ({
   form,
@@ -68,11 +67,9 @@ const EditProfile = ({
 
   return (
     <>
-      <Tooltip title="Edit profle" placement="top">
-        <IconButton onClick={openModal}>
-          <EditIcon color="primary" />
-        </IconButton>
-      </Tooltip>
+      <TooltipIconButton title="Edit Profile" onClick={openModal}>
+        <EditIcon color="primary" />
+      </TooltipIconButton>
       <Dialog open={openup} onClose={closeModal} fullWidth maxWidth="sm">
         <DialogTitle>Edit profile</DialogTitle>
         <DialogContent>

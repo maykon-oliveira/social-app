@@ -6,3 +6,7 @@ body {
 a {
   text-decoration: none;
 }
+
+.MuiSvgIcon-colorPrimary {
+  color: #fff !important;
+}

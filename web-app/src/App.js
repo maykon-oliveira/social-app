@@ -14,7 +14,7 @@ import { Home } from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import AuthRoute from "./utils/AuthRoute";
-import { Navbar } from "./components/Navbar";
+import Navbar from "./components/Navbar";
 
 import "./App.css";
 import Axios from "axios";
